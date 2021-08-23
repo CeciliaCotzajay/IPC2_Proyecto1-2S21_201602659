@@ -23,7 +23,7 @@ class Main:
         try:
             ter = input("--->>>>presione Cero 0 para continuar--->>>>     ")
             if ter == '0':
-                self.presentacion()
+                self.menuPrincipal()
         except:
             self.presentacion()
 
