@@ -62,7 +62,8 @@ class Main:
                 self.continuar()
             # GENERAR GRAFICA
             elif opc == 5:
-                print("No gráfica :(")
+                self.metodos.graficarTerreno()
+                self.continuar()
             # SALIDA
             elif opc == 6:
                 print("**********************************************")

@@ -1,5 +1,7 @@
 from xml.dom import minidom
 
+from graphviz import Digraph
+
 from Casilla import Casilla
 from ListaSimple import ListaSimple
 from MatrizOrtogonal import MatrizOrtogonal
@@ -34,10 +36,12 @@ class Metodos:
                 listaPosiciones = terreno.getElementsByTagName("posicion")
                 """print("nombre", nombre)
                  print("IniX", str(x_ini), "IniY", str(y_ini))
-                 print("FinX", str(x_fin), "FinY", str(y_fin))"""
-                # #
+                 print("FinX", str(x_fin), "FinY", str(y_fin))
+                 print("x:", x_pos,"y:",y_pos,"val:",valor)
+                print("x:", j, "y:", i)"""
+                # -------------------------------------------------
                 # CONTABILIZACION DE X's y Y's PARA CREAR CABECERAS
-                # #
+                # -------------------------------------------------
                 i = 1  # filas Y
                 j = 1  # columnas X
                 for posicion in listaPosiciones:
@@ -49,8 +53,24 @@ class Metodos:
                     else:
                         j += 1
                         i = 1
-                    """valor = posicion.firstChild.data
-                    print("x:", x_pos,"y:",y_pos,"val:",valor)
-                print("x:", j, "y:", i)"""
                 self.matrizOrtogonal = MatrizOrtogonal()
-                self.matrizOrtogonal.crearCabeceras(i, j)
+                self.matrizOrtogonal.crearCabeceras(i, j, x_ini, y_ini, x_fin, y_fin)
+                # -------------------------------------------------
+                # INSERCCIÓN DE LOS NODOS
+                # -------------------------------------------------
+                for posicion in listaPosiciones:
+                    x_pos = int(posicion.getAttribute("x"))
+                    y_pos = int(posicion.getAttribute("y"))
+                    valor = posicion.firstChild.data
+                    casilla = Casilla(x_pos, y_pos, valor)
+                    self.matrizOrtogonal.insertar(casilla)
+                self.listaS.insertar(nombre, self.matrizOrtogonal)
+        print(".....")
+        print("----->Archivo Cargado Exitosamente!")
+
+        self.listaS.imprimir()
+
+    def graficarTerreno(self):
+        print("Terrenos Registrados: ")
+
+
