@@ -72,5 +72,16 @@ class Metodos:
 
     def graficarTerreno(self):
         print("Terrenos Registrados: ")
-
+        self.listaS.imprimirSoloNombre()
+        nombreTerreno = str(input("Ingrese nombre del Terreno: " + '\n'))
+        print("----->Graficando Terreno...")
+        print(".....")
+        self.matrizOrtogonal = self.listaS.buscarTerreno(nombreTerreno)
+        if self.matrizOrtogonal is None:
+            print(".....")
+            print("----->Error! terreno NO encontrado...")
+        else:
+            dot = Digraph(comment="Agenda")
+            print(".....")
+            print("----->Terreno graficado Exitosamente!")
 
