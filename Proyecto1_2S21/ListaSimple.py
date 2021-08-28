@@ -58,4 +58,5 @@ class ListaSimple:
             cont = 1
             while actual is not None:
                 print(str(cont)+":", actual.nombre)
+                cont += 1
                 actual = actual.siguiente

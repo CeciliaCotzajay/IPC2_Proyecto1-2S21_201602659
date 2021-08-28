@@ -87,7 +87,7 @@ class MatrizOrtogonal:
         if tamFil != 0:
             contf = 1
             while contf <= tamFil:
-                casilla = Casilla(0, contf, "Y")
+                casilla = Casilla(0, contf, "Y"+str(contf))
                 self.insertarCabeceraY(casilla)
                 contf += 1
         else:
@@ -95,7 +95,7 @@ class MatrizOrtogonal:
         if tamCol != 0:
             contc = 1
             while contc <= tamCol:
-                casilla = Casilla(contc, 0, "X")
+                casilla = Casilla(contc, 0, "X"+str(contc))
                 self.insertarCabeceraX(casilla)
                 contc += 1
         else:
