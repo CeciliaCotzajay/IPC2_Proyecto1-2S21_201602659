@@ -124,48 +124,67 @@ class Metodos:
 
     def graficarTerreno(self):
         print("Terrenos Registrados: ")
-        # self.listaS.imprimirSoloNombre()
-        # nombreTerreno = str(input("Ingrese nombre del Terreno: " + '\n'))
-        # print("----->Graficando Terreno...")
-        # print(".....")
-        # self.matrizOrtogonal = self.listaS.buscarTerreno(nombreTerreno)
-        # if self.matrizOrtogonal is None:
-        #     print(".....")
-        #     print("----->Error! terreno NO encontrado...")
-        # else:
-        #     dot = Digraph(comment=nombreTerreno,
-        #                   encoding='utf',
-        #                   edge_attr={'color': '#999999', 'fontcolor': '#888888', 'fontsize': '10',
-        #                              'fontname': 'FangSong'},
-        #                   )
-        #     auxf = self.matrizOrtogonal.Pivote
-        #     valorAnteriorY = None
-        #     valorSiguienteY = None
-        #     while auxf is not None:
-        #         auxc = auxf
-        #         valorAnteriorX = None
-        #         while auxc is not None:
-        #             pos_X = str(auxc.Casilla.posX)
-        #             pos_Y  = str(auxc.Casilla.posY)
-        #             valor = auxc.Casilla.valor
-        #             iD = pos_X+","+pos_Y
-        #             valorSiguienteX = iD
-        #             if valor == "P":
-        #                 dot.node(iD, str(valor),
-        #                                       {'shape': 'circle', 'color': 'blue', 'fontcolor': 'blue'})
-        #                 valorAnteriorY = iD
-        #                 valorAnteriorX = iD
-        #             elif 'X' in valor:
-        #                 dot.node(valor, str(valor),
-        #                          {'shape': 'circle', 'color': 'blue', 'fontcolor': 'blue'})
-        #                 dot.edge(valorAnteriorX, valorSiguienteX)
-        #                 dot.edge(valorSiguienteX, valorAnteriorX)
-        #                 valorAnteriorX = iD
-        #             elif 'Y' in valor:
-        #
-        #             auxc = auxc.siguiente
-        #         auxf = auxf.abajo
-        #     print(dot.source)
-        #     dot.render(nombreTerreno, "C:\\Users\\Maria\\Desktop", view=True)
-        #     print(".....")
-        #     print("----->Terreno graficado Exitosamente!")
+        self.listaS.imprimirSoloNombre()
+        nombreTerreno = str(input("Ingrese nombre del Terreno: " + '\n'))
+        print("----->Graficando Terreno...")
+        print(".....")
+        self.matrizOrtogonal = self.listaS.buscarTerreno(nombreTerreno)
+        if self.matrizOrtogonal is None:
+            print(".....")
+            print("----->Error! terreno NO encontrado...")
+        else:
+            dot = Digraph(comment=nombreTerreno,
+                          encoding='utf',
+                          edge_attr={'color': '#999999', 'fontcolor': '#888888', 'fontsize': '10',
+                                     'fontname': 'FangSong'}
+                          )
+            dot.attr(bgcolor='purple:skyblue', label="'"+nombreTerreno.upper()+"'", fontcolor='black')
+            # dot.graph_attr['rankdir'] = 'LR'
+            auxf = self.matrizOrtogonal.Pivote
+            valorArribaY = None
+            while auxf is not None:
+                auxc = auxf
+                valorAnteriorX = None
+                while auxc is not None:
+                    pos_X = str(auxc.Casilla.posX)
+                    pos_Y = str(auxc.Casilla.posY)
+                    valor = auxc.Casilla.valor
+                    iD = pos_X+","+pos_Y+"\n"+valor
+                    valorActualX = iD
+                    valorActualY = iD
+                    with dot.subgraph() as inicial:
+                        inicial.attr(rank='same')
+                        if valor == "P":
+                            inicial.node(iD, str(valor),
+                                     {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
+                            valorArribaY = iD
+                            valorAnteriorX = iD
+                        elif 'X' in valor:
+                            inicial.attr(rank='same')
+                            inicial.node(iD, str(valor),
+                                     {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
+                            inicial.edge(valorAnteriorX, valorActualX)
+                            inicial.edge(valorActualX, valorAnteriorX)
+                            valorAnteriorX = iD
+                    with dot.subgraph() as resto:
+                        if 'Y' in valor:
+                            resto.node(iD, str(valor),
+                                     {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
+                            resto.edge(valorArribaY, valorActualY)
+                            resto.edge(valorActualY, valorArribaY)
+                            valorArribaY = iD
+                            valorAnteriorX = iD
+                        # else:
+                        #     resto.node(iD, str(valor),
+                        #              {'shape': 'circle', 'color': 'pink', 'fontcolor': 'black'})
+                        #     resto.edge(valorArribaY, valorActualY)  # en fila en Y, anterior-actual
+                        #     resto.edge(valorArribaY, valorActualY)  # en fila en Y, actual-anterior
+                        #     resto.edge(valorActualY, valorArribaY)  # en columna en X, arriba-actual
+                        #     resto.edge(valorActualY, valorArribaY)  # en columna en X, actual-arriba
+                        #     valorArribaY = iD
+                    auxc = auxc.siguiente
+                auxf = auxf.abajo
+            print(dot.source)
+            dot.render(nombreTerreno, "C:\\Users\\Maria\\Desktop", view=True)
+            print(".....")
+            print("----->Terreno graficado Exitosamente!")
