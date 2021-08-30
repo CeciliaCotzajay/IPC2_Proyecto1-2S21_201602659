@@ -138,51 +138,59 @@ class Metodos:
                           edge_attr={'color': '#999999', 'fontcolor': '#888888', 'fontsize': '10',
                                      'fontname': 'FangSong'}
                           )
-            dot.attr(bgcolor='purple:skyblue', label="'"+nombreTerreno.upper()+"'", fontcolor='black')
+            dot.attr(bgcolor='purple:skyblue', label="'" + nombreTerreno.upper() + "'", fontcolor='blue')
             # dot.graph_attr['rankdir'] = 'LR'
             auxf = self.matrizOrtogonal.Pivote
             valorArribaY = None
+            contY = 0
             while auxf is not None:
                 auxc = auxf
                 valorAnteriorX = None
+                contX = 0
                 while auxc is not None:
                     pos_X = str(auxc.Casilla.posX)
                     pos_Y = str(auxc.Casilla.posY)
                     valor = auxc.Casilla.valor
-                    iD = pos_X+","+pos_Y+"\n"+valor
+                    iD = pos_X + "," + pos_Y
                     valorActualX = iD
                     valorActualY = iD
-                    with dot.subgraph() as inicial:
-                        inicial.attr(rank='same')
-                        if valor == "P":
-                            inicial.node(iD, str(valor),
-                                     {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
-                            valorArribaY = iD
-                            valorAnteriorX = iD
-                        elif 'X' in valor:
+                    if valor == "P":
+                        dot.node(iD, str(valor),
+                                 {'shape': 'circle', 'color': 'pink', 'fontcolor': 'black'})
+                        valorArribaY = iD
+                        valorAnteriorX = iD
+                    elif 'X' in valor:
+                        with dot.subgraph() as inicial:
                             inicial.attr(rank='same')
                             inicial.node(iD, str(valor),
-                                     {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
+                                         {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'}, group=str(contX))
                             inicial.edge(valorAnteriorX, valorActualX)
                             inicial.edge(valorActualX, valorAnteriorX)
                             valorAnteriorX = iD
                     with dot.subgraph() as resto:
                         if 'Y' in valor:
                             resto.node(iD, str(valor),
-                                     {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
+                                       {'shape': 'circle', 'color': 'white', 'fontcolor': 'blue'})
                             resto.edge(valorArribaY, valorActualY)
                             resto.edge(valorActualY, valorArribaY)
-                            valorArribaY = iD
+                            valorArribaY = iD  # intacto-------------
                             valorAnteriorX = iD
-                        # else:
-                        #     resto.node(iD, str(valor),
-                        #              {'shape': 'circle', 'color': 'pink', 'fontcolor': 'black'})
-                        #     resto.edge(valorArribaY, valorActualY)  # en fila en Y, anterior-actual
-                        #     resto.edge(valorArribaY, valorActualY)  # en fila en Y, actual-anterior
-                        #     resto.edge(valorActualY, valorArribaY)  # en columna en X, arriba-actual
-                        #     resto.edge(valorActualY, valorArribaY)  # en columna en X, actual-arriba
-                        #     valorArribaY = iD
+                        if valor.isdigit():
+                            with resto.subgraph() as resto2:
+                                resto2.attr(rank='same')
+                                resto2.node(iD, str(valor),
+                                            {'shape': 'circle', 'color': 'pink', 'fontcolor': 'black'},
+                                            group=str(contX))
+                                auxArribaY = str(contX)+","+str(contY-1)
+                                resto2.edge(valorAnteriorX, valorActualX)  # en fila en Y, anterior-actual
+                                resto2.edge(valorActualX, valorAnteriorX)  # en fila en Y, actual-anterior
+                                dot.edge(auxArribaY, valorActualY)  # en columna en X, arriba-actual
+                                dot.edge(valorActualY, auxArribaY)  # en columna en X, actual-arriba
+                                valorAnteriorX = iD
+                    contX += 1
                     auxc = auxc.siguiente
+
+                contY += 1
                 auxf = auxf.abajo
             print(dot.source)
             dot.render(nombreTerreno, "C:\\Users\\Maria\\Desktop", view=True)
