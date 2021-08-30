@@ -10,6 +10,7 @@ from MatrizOrtogonal import MatrizOrtogonal
 class Metodos:
     listaS = ListaSimple()
     matrizOrtogonal = None
+    cad = ""
 
     def cargarArchivo(self):
         rutaArchivo = str(input("Ingrese la Ruta Completa de su Archivo: " + '\n'))
@@ -189,10 +190,18 @@ class Metodos:
                                 valorAnteriorX = iD
                     contX += 1
                     auxc = auxc.siguiente
-
                 contY += 1
                 auxf = auxf.abajo
-            print(dot.source)
+            # print(dot.source)
             dot.render(nombreTerreno, "C:\\Users\\Maria\\Desktop", view=True)
             print(".....")
             print("----->Terreno graficado Exitosamente!")
+
+    def crearArchivo(self, ruta):
+        archivo = open(ruta, "w")
+        archivo.close()
+
+    def escribirLinea(self, ruta, linea):
+        archivo = open(ruta, "a")
+        archivo.write(linea+"\n")
+        archivo.close()
